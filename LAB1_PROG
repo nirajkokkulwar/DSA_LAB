@@ -6,7 +6,7 @@
 int stack[MAX];
 int top = -1;
 
-// Function to push an element into the stack
+
 void push() {
     int element;
     if (top == MAX - 1) {
@@ -20,7 +20,7 @@ void push() {
     }
 }
 
-// Function to pop an element from the stack
+
 void pop() {
     if (top == -1) {
         printf("Stack Underflow! No elements to pop.\n");
@@ -30,7 +30,7 @@ void pop() {
     }
 }
 
-// Function to display stack elements
+
 void display() {
     if (top == -1) {
         printf("Stack is empty.\n");
