@@ -1,0 +1,182 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *prev;
+    struct Node *next;
+};
+
+struct Node *head = NULL;
+struct Node *tail = NULL;
+
+
+struct Node* createNode(int val) {
+    struct Node *newn = (struct Node*)malloc(sizeof(struct Node));
+    newn->data = val;
+    newn->prev = NULL;
+    newn->next = NULL;
+    return newn;
+}
+
+void insertAtEnd(int val) {
+    struct Node *newn = createNode(val);
+
+    if (head == NULL) { // empty list
+        head = tail = newn;
+        return;
+    }
+
+    tail->next = newn;
+    newn->prev = tail;
+    tail = newn;
+}
+
+void insertLeftOfValue(int target, int val) {
+    if (head == NULL) {
+        printf("List empty!\n");
+        return;
+    }
+
+    struct Node *temp = head;
+
+    while (temp != NULL && temp->data != target)
+        temp = temp->next;
+
+    if (temp == NULL) {
+        printf("Value %d not found!\n", target);
+        return;
+    }
+
+    struct Node *newn = createNode(val);
+
+    
+    if (temp == head) {
+        newn->next = head;
+        head->prev = newn;
+        head = newn;
+        return;
+    }
+
+    
+    newn->next = temp;
+    newn->prev = temp->prev;
+    temp->prev->next = newn;
+    temp->prev = newn;
+}
+
+
+void deleteByValue(int target) {
+    if (head == NULL) {
+        printf("List empty!\n");
+        return;
+    }
+
+    struct Node *temp = head;
+
+    while (temp != NULL && temp->data != target)
+        temp = temp->next;
+
+    if (temp == NULL) {
+        printf("Value %d not found!\n", target);
+        return;
+    }
+
+    
+    if (temp == head && temp == tail) {
+        head = tail = NULL;
+        free(temp);
+        return;
+    }
+
+    
+    if (temp == head) {
+        head = head->next;
+        head->prev = NULL;
+        free(temp);
+        return;
+    }
+
+   
+    if (temp == tail) {
+        tail = tail->prev;
+        tail->next = NULL;
+        free(temp);
+        return;
+    }
+
+    
+    temp->prev->next = temp->next;
+    temp->next->prev = temp->prev;
+    free(temp);
+}
+
+
+void display() {
+    if (head == NULL) {
+        printf("List empty!\n");
+        return;
+    }
+
+    struct Node *temp = head;
+    printf("List: ");
+
+    while (temp != NULL) {
+        printf("%d <-> ", temp->data);
+        temp = temp->next;
+    }
+
+    printf("NULL\n");
+}
+
+
+int main() {
+    int choice, val, target;
+
+    while (1) {
+        printf("\n----- DOUBLY LINKED LIST MENU (HEAD + TAIL) -----\n");
+        printf("1. Insert at End (Create)\n");
+        printf("2. Insert to the LEFT of a Value\n");
+        printf("3. Delete by Value\n");
+        printf("4. Display List\n");
+        printf("5. Exit\n");
+        printf("--------------------------------------------------\n");
+
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value: ");
+                scanf("%d", &val);
+                insertAtEnd(val);
+                break;
+
+            case 2:
+                printf("Enter target value: ");
+                scanf("%d", &target);
+                printf("Enter new value: ");
+                scanf("%d", &val);
+                insertLeftOfValue(target, val);
+                break;
+
+            case 3:
+                printf("Enter value to delete: ");
+                scanf("%d", &target);
+                deleteByValue(target);
+                break;
+
+            case 4:
+                display();
+                break;
+
+            case 5:
+                exit(0);
+
+            default:
+                printf("Invalid choice!\n");
+        }
+    }
+
+    return 0;
+}
