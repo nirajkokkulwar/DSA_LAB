@@ -1,0 +1,139 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* head = NULL;
+
+void createList(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+
+    if (head == NULL) {
+        head = newNode;
+        return;
+    }
+
+    struct Node* temp = head;
+    while (temp->next != NULL)
+        temp = temp->next;
+
+    temp->next = newNode;
+}
+
+
+void insertFirst(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = head;
+    head = newNode;
+}
+
+void insertEnd(int data) {
+    createList(data);
+}
+
+
+void insertAtPosition(int data, int pos) {
+    if (pos == 1) {
+        insertFirst(data);
+        return;
+    }
+
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+
+    struct Node* temp = head;
+    int i;
+
+    for (i = 1; i < pos - 1; i++) {
+        if (temp == NULL) {
+            printf("Position out of range!\n");
+            return;
+        }
+        temp = temp->next;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+
+void display() {
+    if (head == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    struct Node* temp = head;
+    printf("Linked List: ");
+
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    int choice, data, pos;
+
+    while (1) {
+        printf("\n--- Singly Linked List Menu ---\n");
+        printf("1. Create List (Insert at End)\n");
+        printf("2. Insert at Beginning\n");
+        printf("3. Insert at Position\n");
+        printf("4. Insert at End\n");
+        printf("5. Display\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter data: ");
+                scanf("%d", &data);
+                createList(data);
+                break;
+
+            case 2:
+                printf("Enter data: ");
+                scanf("%d", &data);
+                insertFirst(data);
+                break;
+
+            case 3:
+                printf("Enter data: ");
+                scanf("%d", &data);
+                printf("Enter position: ");
+                scanf("%d", &pos);
+                insertAtPosition(data, pos);
+                break;
+
+            case 4:
+                printf("Enter data: ");
+                scanf("%d", &data);
+                insertEnd(data);
+                break;
+
+            case 5:
+                display();
+                break;
+
+            case 6:
+                exit(0);
+
+            default:
+                printf("Invalid choice! Try again.\n");
+        }
+    }
+
+    return 0;
+}
+
+//By NIRAJ;
